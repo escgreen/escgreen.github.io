@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h1>amiculator</h1>
+    <p>
+      使い方の説明
+    </p>
+    <label>
+      <span>ゲージ目</span>
+      <input type="number" min="1" step="1" value="1" id="gage_me"/>
+    </label>
+
+    <label>
+      <span>ゲージ段</span>
+      <input type="number" min="1" step="1" value="1" id="gage_dan"/>
+    </label>
+
+    <label>
+      <span>球の段</span>
+      <input type="number" min="1" max="72" value="35" step="1" id="kyu_dan"/>
+    </label>
+
+
+    <label>
+      <span>倍数</span>
+      <input type="number" min="1" value="3" step="1" id="baisu"/>
+    </label>
+
+  <button type="button" id="caluclate">計算する</button>
+
+    <p>
+      <span>計算結果</span>
+      <div id="result">
+      </div>
+    </p>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      console.log("loaded");
+
+      $("#caluclate").click(function(){
+        console.log("clicked");
+        var gage_me = Number($('#gage_me').val());
+        var gage_dan = Number($('#gage_dan').val());
+        var dan = Number($('#kyu_dan').val());
+        var baisu = Number($('#baisu').val());
+        
+        // TODO error check
+    
+        console.log("dbg",gage_me, gage_dan, dan, baisu);
+        var output = "";
+        for(var i = 1; i <= dan; i++){
+          var theta = 90 - (180 / (dan + 1)) * i;
+          var cos_theta = Math.cos(theta * Math.PI / 180);
+          var me = 2 * gage_me * (dan + 1)/gage_dan;
+          var r  = Math.round( cos_theta * me / baisu) * baisu;
+
+          console.log("dbg2",i, theta, cos_theta, r);
+          output += (i + "段目: "+ r +"<br>");
+        }
+        $('#result').html(output);
+
+      });
+    });
+
+  </script>
+  </body>
+</html>
