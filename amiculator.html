@@ -72,8 +72,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script>
     $(document).ready(function(){
-      console.log("loaded");
-
       $("#kyu_dan").change(function(){
         var dan = Number($('#kyu_dan').val());
 	      if(dan > 1000 || dan < 1){
@@ -95,7 +93,6 @@
 	      return;
       }
 
-        console.log("dbg",gage_me, gage_dan, dan, baisu);
         var output = "";
         for(var i = 1; i <= dan; i++){
           var theta = 90 - (180 / (dan + 1)) * i;
@@ -103,7 +100,6 @@
           var me = 2 * gage_me * (dan + 1)/gage_dan;
           var r  = Math.round( cos_theta * me / baisu) * baisu;
 
-          console.log("dbg2",i, theta, cos_theta, r);
           output += (i + "段目: "+ r +"<br>");
         }
         $('#result').html(output);
