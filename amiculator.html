@@ -2,6 +2,7 @@
 <html>
   <head>
     <base target="_top">
+    <title>amiculator</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body>
@@ -16,7 +17,7 @@
     <h2 class="px-1 text-2xl/10 font-medium tracking-tight sm:px-2">使い方</h2>
 <ol class="px-2 list-decimal sm:px-10">
 <li>ゲージとこれから編みたい球の段数を入力します</li> 
-<li>最適目数はお好みの数字を入れてください（3または6がおススメです！）</li> 
+<li>倍数はお好みの数字を選んでください（3または6がおススメです！）</li> 
 <li>表が表示されます。思う存分編みましょう！</li> 
 </ol>
     <h2 class="mt-4 px-1 text-2xl/10 font-medium tracking-tight sm:px-2">設定</h2>
@@ -25,23 +26,24 @@
 		  <div class="sm:col-span-3">
 			  <label for="gage_me" class="block text-sm/6 font-bold text-gray-900">ゲージ（目）</label>
 			  <div class="mt-2">
-				  <input type="number" min="1" step="1" value="1" id="gage_me" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+				  <input type="number" min="1" step="0.1" value="1" id="gage_me" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
 			  </div>
 		  </div>
 		  <div class="sm:col-span-3">
 			  <label for="gage_dan" class="block text-sm/6 font-bold text-gray-900">ゲージ（段）</label>
 			  <div class="mt-2">
-				  <input type="number" min="1" step="1" value="1" id="gage_dan" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+				  <input type="number" min="1" step="0.1" value="1" id="gage_dan" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
 			  </div>
 		  </div>
 		  <div class="sm:col-span-3">
 			  <label for="kyu_dan" class="block text-sm/6 font-bold text-gray-900">球の段数</label>
 			  <div class="mt-2">
 				  <input type="number" min="1" max="1000" step="1" value="10" id="kyu_dan" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+				  <p class="text-red-500 text-xs italic invisible" id="kyu_dan_error">1～1000の整数を入力してください</p>
 			  </div>
 		  </div>
 		  <div class="sm:col-span-3">
-			  <label for="baisu" class="block text-sm/6 font-bold text-gray-900">最適目数</label>
+			  <label for="baisu" class="block text-sm/6 font-bold text-gray-900">倍数</label>
 			  <div class="mt-2">
 				  <select id="baisu" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
 					<option>1</option>
@@ -59,7 +61,7 @@
 		  </div>
 	  </div>
 
-	  <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
+	  <div class="mt-7 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
 		  <div class="sm:col-span-3">
 			  <button type="button" id="caluclate" class="rounded-md bg-pink-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-pink-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600">計算する</button>
 		  </div>
@@ -72,6 +74,15 @@
     $(document).ready(function(){
       console.log("loaded");
 
+      $("#kyu_dan").change(function(){
+        var dan = Number($('#kyu_dan').val());
+	      if(dan > 1000 || dan < 1){
+		      $("#kyu_dan_error").removeClass("invisible");
+	      }else{
+		      $("#kyu_dan_error").addClass("invisible");
+	      }
+      });
+
       $("#caluclate").click(function(){
         console.log("clicked");
         var gage_me = Number($('#gage_me').val());
@@ -79,8 +90,11 @@
         var dan = Number($('#kyu_dan').val());
         var baisu = Number($('#baisu').val());
         
-        // TODO error check
-    
+        // error check
+      if(dan > 1000 || dan < 1){
+	      return;
+      }
+
         console.log("dbg",gage_me, gage_dan, dan, baisu);
         var output = "";
         for(var i = 1; i <= dan; i++){
